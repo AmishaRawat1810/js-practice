@@ -1,2 +1,3 @@
 const meadow = "a e i o u";
-console.log(meadow,"\nVowel Islands : 5");
+const vowelIsland = 5;
+console.log(meadow,"\nVowel Islands :",vowelIsland);
