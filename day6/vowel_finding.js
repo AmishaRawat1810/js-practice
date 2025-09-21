@@ -19,9 +19,5 @@ for( isVowel = 0; isVowel < meadowLength; isVowel++ ){
         break;
       }
     }
-
   }
 }
-
-const infix = "\nVowel Islands :";
-console.log(meadow,infix,vowelIsland);
