@@ -14,7 +14,6 @@ for(findingVowel = 0; findingVowel < meadowLength; findingVowel++){
 }
 
 console.log("Meadow length",meadowLength);
-console.log("Number of islands : ",vowelIsland);
 
 const infix = "\nVowel Islands :";
 console.log(meadow,infix,vowelIsland);
