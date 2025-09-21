@@ -1,3 +1,5 @@
 const meadow = "a e i o u";
 const vowelIsland = 5;
-console.log(meadow,"\nVowel Islands :",vowelIsland);
+const infix = "\nVowel Islands :";
+
+console.log(meadow,infix,vowelIsland);
