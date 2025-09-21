@@ -4,11 +4,11 @@ const meadowLength = meadow.length;
 const islandRequirement = "aeiou";
 const islandRequirementLength = islandRequirement.length;
 
-let findingVowel = 0;
+let isVowel = 0;
 let vowelIsland = 0;
 
-for(findingVowel = 0; findingVowel < meadowLength; findingVowel++){
-  if( meadow[findingVowel] === "a" || meadow[findingVowel] === "e" || meadow[findingVowel] === "i" || meadow[findingVowel] === "o" || meadow[findingVowel] === "u" ){
+for(isVowel = 0; isVowel < meadowLength; isVowel++){
+  if( meadow[isVowel] === "a" || meadow[isVowel] === "e" || meadow[isVowel] === "i" || meadow[isVowel] === "o" || meadow[isVowel] === "u" ){
     vowelIsland = vowelIsland + 1;
   }
 }
