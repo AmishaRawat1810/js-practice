@@ -2,14 +2,14 @@ const meadow = "eat cake";
 const infix = "\nVowel Islands :";
 const vowelIsland = 0;
 const meadowLength = meadow.length;
-const vowelIslandRequirement = "aeiou";
+const islandRequirement = "aeiou";
+const islandRequirementLength = islandRequirement.length;
 
-let exploreMeadow = 0;
+let findingVowel = 0;
 
-for(exploreMeadow = 0; exploreMeadow < meadowLength; exploreMeadow++){
-  console.log("meadow :", meadow[exploreMeadow] );
+for(findingVowel = 0; findingVowel < meadowLength; findingVowel++){
+  console.log("meadow :", meadow[findingVowel] );
 }
 
-console.log(vowelIslandRequirement);
 console.log("Meadow length",meadowLength);
 console.log(meadow,infix,vowelIsland);
