@@ -1,1 +1,1 @@
-console.log("hello world");
+console.log("eat cake\nVowel Islands : 3");
