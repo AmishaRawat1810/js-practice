@@ -6,7 +6,10 @@ In a meadow, vowels (a, e, i, o, u) form little islands in a sea of consonants a
 1.	Input: a string containing lowercase letters and spaces.
 2.	Output: the number of contiguous vowel groups (a, e, i, o, u). If there are no vowels, return 0.
 
+
+
 **Test Cases to Try**
+
    Input         |	 Expected Output
 "eat cake"	     |       3
 "a e i o u"   	  |       5
@@ -14,6 +17,7 @@ In a meadow, vowels (a, e, i, o, u) form little islands in a sea of consonants a
 "queue"	        |       1
 "beautiful day"  |       3
 "" (empty string)|       0
+
 
 
 **Examples**
