@@ -1,1 +1,1 @@
-console.log("hello world");
+console.log("input : aaabb cccc a\noutput : c 4")
