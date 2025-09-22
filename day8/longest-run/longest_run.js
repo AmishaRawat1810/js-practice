@@ -1,2 +1,6 @@
 const fenceOfLetters = "aaabb cccc"
-console.log("input : ",fenceOfLetters,"\noutput : c 4")
+const prefix = "fence :"
+const postfix = "\nOutput :"
+const longestRepeatedTag = "c";
+let tagCount = 4;
+console.log(prefix,fenceOfLetters,postfix,longestRepeatedTag,tagCount);
