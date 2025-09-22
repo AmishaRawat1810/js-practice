@@ -21,9 +21,9 @@ for( isVowel = 0; isVowel < meadowLength; isVowel++ ){
     //for checking whether it is a island of more than 1 vowel
     for( isIsland = isVowel + 1; isIsland < meadowLength; isIsland++ ){
       if ( meadow[isIsland] !== "a" || meadow[isIsland] !== "e" || meadow[isIsland] !== "i" || meadow[isIsland] !== "o" || meadow[isIsland] !== "u" ){
-        isVowel = isIsland; //the outer loop equals to found consonant's index
         break;
       }
+      isVowel = isIsland; //the outer loop equals to found consonant's index
     }
   }
 }
