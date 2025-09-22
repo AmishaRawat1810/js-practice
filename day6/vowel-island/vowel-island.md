@@ -8,12 +8,12 @@ In a meadow, vowels (a, e, i, o, u) form little islands in a sea of consonants a
 
 **Test Cases to Try**
    Input         |	 Expected Output
-"eat cake"	            3
-"a e i o u"   	        5
-"bcdfg"	                0
-"queue"	                1
-"beautiful day"	        3
-"" (empty string)	      0
+"eat cake"	     |       3
+"a e i o u"   	  |       5
+"bcdfg"	        |       0
+"queue"	        |       1
+"beautiful day"  |       3
+"" (empty string)|       0
 
 
 **Examples**
