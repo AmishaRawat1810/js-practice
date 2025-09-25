@@ -14,9 +14,9 @@ function testRepeatString(stringToRepeat, repeatCount, expectedValue) {
 }
 
 function testAll(){
-  testRepeatString("hi",2, "hi hi ");
-  testRepeatString("bye",3, "bye bye bye ");
-  testRepeatString("ho!",4, "ho! ho! ho! ho! ");
+  testRepeatString("hi", 2, "hi hi ");
+  testRepeatString("bye", 3, "bye bye bye ");
+  testRepeatString("ho!", 4, "ho! ho! ho! ho! ");
 }
 
 testAll();
