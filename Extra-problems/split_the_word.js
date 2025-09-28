@@ -30,11 +30,16 @@ function buildWord(word) {
   return result;
 }
 
+function message(string, result, expected, checkValue) {
+  return checkValue +'[' + string + ']' + ' | ' + '[' + result + ']' + ' | ' + '[' + expected + ']';
+}
+
 function testSplitting(string, expected) {
   const result = buildWord(string);
+  const messageToShow = message(string, result, expected);
   const checkValue = result === expected ? '✅' : '❌';
-  
-  console.log(checkValue + ' [' + string + '] → [' + result + '] | expected [' + expected + ']');
+
+  console.log(message(string, result, expected, checkValue));
 }
 
 function testAll() {
