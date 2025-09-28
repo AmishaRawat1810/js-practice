@@ -31,7 +31,7 @@ function buildWord(word) {
 }
 
 function message(string, result, expected, checkValue) {
-  return checkValue +'[' + string + ']' + ' | ' + '[' + result + ']' + ' | ' + '[' + expected + ']';
+  return checkValue +'  [' + string + ']' + ' | ' + '[' + result + ']' + ' | ' + '[' + expected + ']';
 }
 
 function testSplitting(string, expected) {
