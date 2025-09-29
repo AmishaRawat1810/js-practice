@@ -8,7 +8,11 @@ function buildWord(word) {
   while (word.length > 0) {
     let foundWord = "";
     let leftoverLetter = "";
-    let expectedLetter = isVowel(word[0]) ? false : true;
+    let expectedLetter = true;
+
+    if (isVowel(word[0])) {
+      expectedLetter = false;
+    }
 
     foundWord = word[0];
 
