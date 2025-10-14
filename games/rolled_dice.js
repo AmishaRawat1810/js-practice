@@ -16,12 +16,12 @@ function playAgain(response) {
 
 function play(chances) {
   const rolledNumber = rollDice();
-  console.log(rolledNumber);
 
   for (let index = 1; index <= chances; index++) {
     const guess = parseInt(prompt("Guess the rolled number : "));
     if (guess === rolledNumber) {
-      return display("\nYou guessed right !!! 🎉🎉🎉🎉\nYour guess ", guess);
+     display("\nYou guessed right !!! 🎉🎉🎉🎉\nYour guess ", guess);
+     return;
     }
     display("\nTry again 🙁\n⚠️ Chances left : ", (chances - index));
   }
@@ -33,7 +33,6 @@ function play(chances) {
 function main() {
   console.clear();
   play(3);
-  console.clear();
   playAgain(confirm("Do you want to play again ? "));
 }
 
