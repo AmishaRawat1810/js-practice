@@ -1,9 +1,9 @@
 const maze3 = [
   '#####################################'.split(''),
-  '# #    #       #         #     #    #'.split(''),
-  '### # ### ### ### ##### ### # ### # #'.split(''),
-  '# # #     # #   #   #   #   #   # # #'.split(''),
-  '# # ####### ##### # # ##### ### # # #'.split(''),
+  '# #    #                 #     #    #'.split(''),
+  '### # ### ### # # ##### ### # ### # #'.split(''),
+  '#   #     # #   #   #   #   #   # # #'.split(''),
+  '# # ####### ### # # # # ### ### # # #'.split(''),
   '# #       #     # # #   #   #   #   #'.split(''),
   '# ####### ##### ### ### ### ### #####'.split(''),
   '#       #     #     #     #   #     E'.split(''),
@@ -42,19 +42,19 @@ function updatePosition(playerCoordinate, playerMove, maze) {
   ]; // W, S, A, D
   const movement = ['w', 's', 'a', 'd'];
   const [y, x] = moves[movement.indexOf(playerMove)];
-  
+
   const [newY, newX] = operateOnCoordinate(playerCoordinate, y, x);
-  console.log('Trying to move to:', newY, newX, '=>', `["${maze[newY][newX]}"]`);
+  console.log('Trying to move to:', newY, newX, '=>', `["${maze[newY][newX]}"]\n`);
+
   if (maze[newY][newX] !== '#') {
-    console.log('Moved to :', newY, newX);
+    console.log('Moved to :', newY, newX, '\n');
     return [newY, newX];
   }
+
   return playerCoordinate;
 }
 
-let playerCoordinate = playerPositionAtStart(maze3);
-
-function movePlayer(maze, playerMove) {
+function movePlayer(maze, playerMove, playerCoordinate) {
   const [row, col] = playerCoordinate;
   maze[row][col] = ' ';
 
@@ -66,8 +66,18 @@ function movePlayer(maze, playerMove) {
 
   const [r, c] = playerCoordinate;
   maze[r][c] = '_';
+  return playerCoordinate;
 }
 
-// displayMaze(maze3);
-movePlayer(maze3, 'w');
-displayMaze(maze3);
+function play() {
+  let [y, x] = playerPositionAtStart(maze3);
+  displayMaze(maze3);
+
+  while (maze3[y, x] !== "E") {
+    const move = prompt("Enter your move : ");
+    [y, x] = movePlayer(maze3, move, [y, x]);
+    displayMaze(maze3);
+  }
+}
+
+play()
