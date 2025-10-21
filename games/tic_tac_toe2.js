@@ -57,7 +57,7 @@ function playAgain () {
   console.log("Thanks for playing... 👋👋");
 }
 
-function placeValue (tile, value) {
+function placeValue (tile, value, playerNumber) {
   const box = [
     [0,0], [0,1], [0,2],
     [1,0], [1,1], [1,2],
@@ -65,6 +65,10 @@ function placeValue (tile, value) {
   ];
 
   const [i, j] = box[tile - 1];
+  if(BOARD[i][j] !== "") {
+    console.log("❌ Tile is already filled !");
+    return userInput(playerNumber, value);
+  }
   BOARD[i][j] = value;
 }
 
@@ -78,7 +82,7 @@ function userInput (playerNumber, value) {
     return userInput(playerNumber, value);
   }
 
-  placeValue (response, value);
+  placeValue (response, value, playerNumber);
   return response;
 }
 
@@ -103,9 +107,18 @@ function play () {
   while(turnCount < 9 && !isGameOver) {
     printBoard();
     getPlayerMove(1, 'X');
-    isGameOver = checkWinner('X', 1) || checkWinner('O', 2);
+    if (checkWinner('X', 1)) {
+      isGameOver = true;
+      return playAgain();
+    }
+    
     getPlayerMove(2, 'O');
-    isGameOver = checkWinner('X', 1) || checkWinner('O', 2);
+
+    if (checkWinner('O', 2)) {
+      isGameOver = true;
+      return playAgain();
+    }
+
     turnCount++;
   }
 
