@@ -87,6 +87,16 @@ function playAgain() {
   confirmation ? play() : console.log("Thanks for playing 👋");
 }
 
+function currentPlayer(turn) {
+  return turn % 2 === 0 ? [1, 'X'] : [2, 'O'];
+}
+
+function makeMove(BOARD, turn) {
+  const [num, char] = currentPlayer(turn);
+  userInput(BOARD, num, char);
+  return [num, char ];
+}
+
 function play() {
   const BOARD = [
     ['', '', ''],
@@ -94,20 +104,15 @@ function play() {
     ['', '', '']
   ];
 
-  let turnCount = 0;
+  let turn = 0;
   let gameOver = false;
 
-  while (turnCount < 9 && !gameOver) {
+  while (turn < 9 && !gameOver) {
     printBoard(BOARD);
-    getPlayerMove(BOARD, 1, 'X');
-    gameOver = checkWinner(BOARD, 'X', 1);
+    const [ num, char ] = makeMove(BOARD, turn);
+    gameOver = checkWinner(BOARD, char, num);
     if (gameOver) return playAgain();
-
-    getPlayerMove(BOARD, 2, 'O');
-    gameOver = checkWinner(BOARD, 'O', 2);
-    if (gameOver) return playAgain();
-
-    turnCount++;
+    turn++;
   }
 
   console.log("🤝 The match is a draw...");
