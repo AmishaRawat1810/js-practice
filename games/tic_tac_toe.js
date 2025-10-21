@@ -14,23 +14,20 @@ function printBoard() {
 
 function diagonalCheck1(value) {
   const move = value;
-  const result =
-    BOARD[1][1] === move && BOARD[2][2] === move && BOARD[0][0] === move;
+  const result = BOARD[1][1] === move && BOARD[2][2] === move && BOARD[0][0] === move;
   return result;
 }
 
 function diagonalCheck2(value) {
   const move = value;
-  const result =
-    BOARD[1][1] === move && BOARD[2][0] === move && BOARD[0][2] === move;
+  const result = BOARD[1][1] === move && BOARD[2][0] === move && BOARD[0][2] === move;
   return result;
 }
 
 function horizontalCheck(value) {
   for (let i = 0; i < 3; i++) {
     const move = value;
-    const result =
-      BOARD[i][1] === move && BOARD[i][2] === move && BOARD[i][0] === move;
+    const result = BOARD[i][1] === move && BOARD[i][2] === move && BOARD[i][0] === move;
     if(result) {
       return true;
     }
@@ -41,8 +38,7 @@ function horizontalCheck(value) {
 function verticalCheck(value) {
   for (let i = 0; i < 3; i++) {
     const move = value;
-    const result =
-      BOARD[1][i] === move && BOARD[2][i] === move && BOARD[0][i] === move;
+    const result = BOARD[1][i] === move && BOARD[2][i] === move && BOARD[0][i] === move;
     if(result) {
       return true;
     }
@@ -67,7 +63,7 @@ function playAgain() {
   console.log("Thanks for playing... 👋👋");
 }
 
-function placeValue(tile, value) {
+function placeValue (tile, value, playerNumber) {
   const box = [
     [0,0], [0,1], [0,2],
     [1,0], [1,1], [1,2],
@@ -75,20 +71,24 @@ function placeValue(tile, value) {
   ];
 
   const [i, j] = box[tile - 1];
+  if(BOARD[i][j] !== "") {
+    console.log("❌ Tile is already filled !");
+    return userInput(playerNumber, value);
+  }
   BOARD[i][j] = value;
 }
 
-function userInput(playerNumber, value) {
-  const response = parseInt(prompt(
-    `Player ${playerNumber} :\nEnter the block number : (1-9) : `
-  ));
+function userInput (playerNumber, value) {
+  const response = parseInt(
+    prompt(`Player ${playerNumber} :\nEnter the block number : (1-9) : `)
+  );
 
   if (isNaN(response) || response < 1 || response > 9) {
     console.log("❌ Invalid input, try again!");
     return userInput(playerNumber, value);
   }
 
-  placeValue(response, value);
+  placeValue (response, value, playerNumber);
   return response;
 }
 
@@ -106,16 +106,25 @@ function checkWinner(playerChar, playerNumber) {
   return false;
 }
 
-function play() {
+function play () {
   let turnCount = 0;
   let isGameOver = false;
 
   while(turnCount < 9 && !isGameOver) {
     printBoard();
     getPlayerMove(1, 'X');
-    isGameOver = checkWinner('X', 1) || checkWinner('O', 2);
+    if (checkWinner('X', 1)) {
+      isGameOver = true;
+      return playAgain();
+    }
+    
     getPlayerMove(2, 'O');
-    isGameOver = checkWinner('X', 1) || checkWinner('O', 2);
+
+    if (checkWinner('O', 2)) {
+      isGameOver = true;
+      return playAgain();
+    }
+
     turnCount++;
   }
 
@@ -123,7 +132,7 @@ function play() {
     console.log("🤝 The match is a draw...");
   }
 
-  playAgain();
+  playAgain ();
 }
 
 play();
