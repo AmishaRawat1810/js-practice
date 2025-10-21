@@ -1,9 +1,19 @@
-function printBoard(BOARD){
+function printBoard(board){
   console.clear();
-  for (let i = 0; i < 3; i++) {
-    console.log(BOARD[i].join(' | '));
+  let placeholder = 1;
+  let boardString = "";
+
+  for (let row = 0; row < 3; row++) {
+    let array = [];
+    for (let col = 0; col < 3; col++) {
+      const tile = board[row][col] === "" ? placeholder.toString() : board[row][col];
+      array.push(tile);
+      placeholder++;
+    }
+    boardString += array.join(" | ");
+    boardString += "\n-------------\n";
   }
-  console.log('\n');
+  console.log(boardString);
 }
 
 function diagonalCheck1(BOARD, move) {
@@ -84,7 +94,7 @@ function playAgain() {
 }
 
 function currentPlayer(turn) {
-  return turn % 2 === 0 ? [1, 'X'] : [2, 'O'];
+  return turn % 2 === 0 ? [1, '❌'] : [2, '🟢'];
 }
 
 function makeMove(BOARD, turn) {
