@@ -14,20 +14,23 @@ function printBoard() {
 
 function diagonalCheck1(value) {
   const move = value;
-  const result = BOARD[1][1] === move && BOARD[2][2] === move && BOARD[0][0] === move;
+  const result =
+    BOARD[1][1] === move && BOARD[2][2] === move && BOARD[0][0] === move;
   return result;
 }
 
 function diagonalCheck2(value) {
   const move = value;
-  const result = BOARD[1][1] === move && BOARD[2][0] === move && BOARD[0][2] === move;
+  const result =
+    BOARD[1][1] === move && BOARD[2][0] === move && BOARD[0][2] === move;
   return result;
 }
 
 function horizontalCheck(value) {
   for (let i = 0; i < 3; i++) {
     const move = value;
-    const result = BOARD[i][1] === move && BOARD[i][2] === move && BOARD[i][0] === move;
+    const result =
+      BOARD[i][1] === move && BOARD[i][2] === move && BOARD[i][0] === move;
     if(result) {
       return true;
     }
@@ -38,7 +41,8 @@ function horizontalCheck(value) {
 function verticalCheck(value) {
   for (let i = 0; i < 3; i++) {
     const move = value;
-    const result = BOARD[1][i] === move && BOARD[2][i] === move && BOARD[0][i] === move;
+    const result =
+      BOARD[1][i] === move && BOARD[2][i] === move && BOARD[0][i] === move;
     if(result) {
       return true;
     }
