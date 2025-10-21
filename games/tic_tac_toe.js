@@ -1,33 +1,33 @@
-const BOX = [
+const BOARD = [
   ['', '', ''],
   ['', '', ''],
   ['', '', '']
 ];
 
-function display() {
+function printBoard() {
   console.clear();
   for (let i = 0; i < 3; i++) {
-    console.log(BOX[i].join(' | '));
+    console.log(BOARD[i].join(' | '));
   }
   console.log('\n');
 }
 
 function diagonalCheck1(value) {
   const move = value;
-  const result = BOX[1][1] === move && BOX[2][2] === move && BOX[0][0] === move;
+  const result = BOARD[1][1] === move && BOARD[2][2] === move && BOARD[0][0] === move;
   return result;
 }
 
 function diagonalCheck2(value) {
   const move = value;
-  const result = BOX[1][1] === move && BOX[2][0] === move && BOX[0][2] === move;
+  const result = BOARD[1][1] === move && BOARD[2][0] === move && BOARD[0][2] === move;
   return result;
 }
 
 function horizontalCheck(value) {
   for (let i = 0; i < 3; i++) {
     const move = value;
-    const result = BOX[i][1] === move && BOX[i][2] === move && BOX[i][0] === move;
+    const result = BOARD[i][1] === move && BOARD[i][2] === move && BOARD[i][0] === move;
     if(result) {
       return true;
     }
@@ -38,7 +38,7 @@ function horizontalCheck(value) {
 function verticalCheck(value) {
   for (let i = 0; i < 3; i++) {
     const move = value;
-    const result = BOX[1][i] === move && BOX[2][i] === move && BOX[0][i] === move;
+    const result = BOARD[1][i] === move && BOARD[2][i] === move && BOARD[0][i] === move;
     if(result) {
       return true;
     }
@@ -63,7 +63,7 @@ function playAgain() {
   console.log("Thanks for playing... 👋👋");
 }
 
-function pushValue(tile, value) {
+function placeValue(tile, value) {
   const box = [
     [0,0], [0,1], [0,2],
     [1,0], [1,1], [1,2],
@@ -71,47 +71,54 @@ function pushValue(tile, value) {
   ];
 
   const [i, j] = box[tile - 1];
-  BOX[i][j] = value;
+  BOARD[i][j] = value;
 }
 
-function userInput(number, value) {
+function userInput(playerNumber, value) {
   const response = parseInt(prompt(
-    `Player ${number} :\nEnter the block number : (1-9) : `
+    `Player ${playerNumber} :\nEnter the block number : (1-9) : `
   ));
 
   if (isNaN(response) || response < 1 || response > 9) {
     console.log("❌ Invalid input, try again!");
-    return userInput(number);
+    return userInput(playerNumber, value);
   }
 
-  pushValue(response, value);
+  placeValue(response, value);
   return response;
 }
 
-function play() {
-  let turns = 0;
+function getPlayerMove(playerNumber, playerSymbol) {
+  const playerMove = userInput(playerNumber, playerSymbol);
+  printBoard();
+  return;
+}
 
-  while(turns < 9) {
-    const player1Move = userInput(1, 'X');
-    display();
-    const winX = isWinner('X');
-    if (winX) {
-      console.log("🎉 Player 1 (X) wins!");
-      break;
-    }
-
-    const player2Move = userInput(2, 'O');
-    display();
-    const winO = isWinner('O');
-    if (winO) {
-      console.log("🎉 Player 2 (O) wins!");
-      break;
-    }
-
-    turns = turns + 1;
+function checkWinner(playerChar, playerNumber) {
+  if (isWinner(playerChar)) {
+    console.log(`🎉 Player ${playerNumber} (${playerChar}) wins!`);
+    return true;
   }
+  return false;
+}
+
+function play() {
+  let turnCount = 0;
+  let isGameOver = false;
+
+  while(turnCount < 9 && !isGameOver) {
+    printBoard();
+    getPlayerMove(1, 'X');
+    getPlayerMove(2, 'O');
+    isGameOver = checkWinner('X', 1) || checkWinner('O', 2);
+    turnCount++;
+  }
+
+  if (!isGameOver) {
+    console.log("🤝 The match is a draw...");
+  }
+
   playAgain();
 }
 
-play()
-console.log(BOX);
+play();
