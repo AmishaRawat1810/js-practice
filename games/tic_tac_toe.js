@@ -66,12 +66,8 @@ function userInput(BOARD, playerNumber, value) {
   }
 
   placeValue(BOARD, response, value, playerNumber);
-  return response;
-}
-
-function getPlayerMove(BOARD, playerNumber, playerSymbol) {
-  userInput(BOARD, playerNumber, playerSymbol);
   printBoard(BOARD);
+  return response;
 }
 
 function checkWinner(BOARD, playerChar, playerNumber) {
