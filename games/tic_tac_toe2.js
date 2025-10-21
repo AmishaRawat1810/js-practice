@@ -1,4 +1,4 @@
-function printBoard(BOARD) {
+function printBoard(BOARD){
   console.clear();
   for (let i = 0; i < 3; i++) {
     console.log(BOARD[i].join(' | '));
@@ -46,7 +46,7 @@ function isWinner(BOARD, char) {
 function playAgain(BOARD) {
   const confirmation = confirm('Do you want to play again ?');
   if (confirmation) {
-    return play(); // BOARD will be reinitialized fresh inside play()
+    return play();
   }
   console.log("Thanks for playing... 👋👋");
 }
