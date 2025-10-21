@@ -1,10 +1,4 @@
-const BOARD = [
-  ['', '', ''],
-  ['', '', ''],
-  ['', '', '']
-];
-
-function printBoard () {
+function printBoard(BOARD) {
   console.clear();
   for (let i = 0; i < 3; i++) {
     console.log(BOARD[i].join(' | '));
@@ -12,7 +6,7 @@ function printBoard () {
   console.log('\n');
 }
 
-function mapCombinationWithBoard (winCombination, char) {
+function mapCombinationWithBoard(BOARD, winCombination, char) {
   for (let index = 0; index < BOARD.length; index++) {
     const element = winCombination[index];
     const row = element[0];
@@ -20,14 +14,14 @@ function mapCombinationWithBoard (winCombination, char) {
     const isWinCombination = BOARD[row][col] === char;
 
     if (!isWinCombination) {
-      return false;      
+      return false;
     }
   }
 
   return true;
 }
 
-function isWinner (char) {
+function isWinner(BOARD, char) {
   const winCombination = [
     ["00", "01", "02"],
     ["10", "11", "12"],
@@ -40,7 +34,7 @@ function isWinner (char) {
   ];
 
   for (let index = 0; index < winCombination.length; index++) {
-    const win = mapCombinationWithBoard(winCombination[index], char);
+    const win = mapCombinationWithBoard(BOARD, winCombination[index], char);
     if (win) {
       return true;
     }
@@ -49,15 +43,15 @@ function isWinner (char) {
   return false;
 }
 
-function playAgain () {
+function playAgain(BOARD) {
   const confirmation = confirm('Do you want to play again ?');
   if (confirmation) {
-    return play();
+    return play(); // BOARD will be reinitialized fresh inside play()
   }
   console.log("Thanks for playing... 👋👋");
 }
 
-function placeValue (tile, value, playerNumber) {
+function placeValue(BOARD, tile, value, playerNumber) {
   const box = [
     [0,0], [0,1], [0,2],
     [1,0], [1,1], [1,2],
@@ -65,68 +59,65 @@ function placeValue (tile, value, playerNumber) {
   ];
 
   const [i, j] = box[tile - 1];
-  if(BOARD[i][j] !== "") {
-    console.log("❌ Tile is already filled !");
-    return userInput(playerNumber, value);
+  if (BOARD[i][j] !== "") {
+    console.log("❌ Tile is already filled!");
+    return userInput(BOARD, playerNumber, value);
   }
   BOARD[i][j] = value;
 }
 
-function userInput (playerNumber, value) {
+function userInput(BOARD, playerNumber, value) {
   const response = parseInt(
     prompt(`Player ${playerNumber} :\nEnter the block number : (1-9) : `)
   );
 
   if (isNaN(response) || response < 1 || response > 9) {
     console.log("❌ Invalid input, try again!");
-    return userInput(playerNumber, value);
+    return userInput(BOARD, playerNumber, value);
   }
 
-  placeValue (response, value, playerNumber);
+  placeValue(BOARD, response, value, playerNumber);
   return response;
 }
 
-function getPlayerMove (playerNumber, playerSymbol) {
-  const playerMove = userInput(playerNumber, playerSymbol);
-  printBoard();
-  return;
+function getPlayerMove(BOARD, playerNumber, playerSymbol) {
+  userInput(BOARD, playerNumber, playerSymbol);
+  printBoard(BOARD);
 }
 
-function checkWinner (playerChar, playerNumber) {
-  if (isWinner(playerChar)) {
+function checkWinner(BOARD, playerChar, playerNumber) {
+  if (isWinner(BOARD, playerChar)) {
     console.log(`🎉 Player ${playerNumber} (${playerChar}) wins!`);
     return true;
   }
   return false;
 }
 
-function play () {
+function play() {
+  const BOARD = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
+  ];
+
   let turnCount = 0;
-  let isGameOver = false;
+  let gameOver = false;
 
-  while(turnCount < 9 && !isGameOver) {
-    printBoard();
-    getPlayerMove(1, 'X');
-    if (checkWinner('X', 1)) {
-      isGameOver = true;
-      return playAgain();
-    }
-    
-    getPlayerMove(2, 'O');
+  while (turnCount < 9 && !gameOver) {
+    printBoard(BOARD);
+    getPlayerMove(BOARD, 1, 'X');
+    gameOver = checkWinner(BOARD, 'X', 1);
+    if (gameOver) return playAgain(BOARD);
 
-    if (checkWinner('O', 2)) {
-      isGameOver = true;
-      return playAgain();
-    }
+    getPlayerMove(BOARD, 2, 'O');
+    gameOver = checkWinner(BOARD, 'O', 2);
+    if (gameOver) return playAgain(BOARD);
 
     turnCount++;
   }
 
-  if (!isGameOver) {
-    console.log("🤝 The match is a draw...");
-  }
-
-  playAgain ();
+  console.log("🤝 The match is a draw...");
+  playAgain(BOARD);
 }
 
-play ();
+play();
