@@ -113,6 +113,7 @@ function play() {
   while(turnCount < 9 && !isGameOver) {
     printBoard();
     getPlayerMove(1, 'X');
+    isGameOver = checkWinner('X', 1) || checkWinner('O', 2);
     getPlayerMove(2, 'O');
     isGameOver = checkWinner('X', 1) || checkWinner('O', 2);
     turnCount++;
