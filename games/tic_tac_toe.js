@@ -1,10 +1,4 @@
-const BOARD = [
-  ['', '', ''],
-  ['', '', ''],
-  ['', '', '']
-];
-
-function printBoard() {
+function printBoard(BOARD){
   console.clear();
   for (let i = 0; i < 3; i++) {
     console.log(BOARD[i].join(' | '));
@@ -12,58 +6,40 @@ function printBoard() {
   console.log('\n');
 }
 
-function diagonalCheck1(value) {
-  const move = value;
-  const result = BOARD[1][1] === move && BOARD[2][2] === move && BOARD[0][0] === move;
-  return result;
+function diagonalCheck1(BOARD, move) {
+  return BOARD[0][0] === move && BOARD[1][1] === move && BOARD[2][2] === move;
 }
 
-function diagonalCheck2(value) {
-  const move = value;
-  const result = BOARD[1][1] === move && BOARD[2][0] === move && BOARD[0][2] === move;
-  return result;
+function diagonalCheck2(BOARD, move) {
+  return BOARD[0][2] === move && BOARD[1][1] === move && BOARD[2][0] === move;
 }
 
-function horizontalCheck(value) {
+function horizontalCheck(BOARD, value) {
+  return BOARD.some(row => row.every(cell => cell === value));
+}
+
+function verticalCheck(BOARD, value) {
   for (let i = 0; i < 3; i++) {
-    const move = value;
-    const result = BOARD[i][1] === move && BOARD[i][2] === move && BOARD[i][0] === move;
-    if(result) {
+    if (
+      BOARD[0][i] === value &&
+      BOARD[1][i] === value &&
+      BOARD[2][i] === value) {
       return true;
     }
   }
   return false;
 }
 
-function verticalCheck(value) {
-  for (let i = 0; i < 3; i++) {
-    const move = value;
-    const result = BOARD[1][i] === move && BOARD[2][i] === move && BOARD[0][i] === move;
-    if(result) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function isWinner(move) {
+function isWinner(BOARD, value) {
   return (
-    diagonalCheck1(move) ||
-    diagonalCheck2(move) ||
-    horizontalCheck(move) ||
-    verticalCheck(move)
+    diagonalCheck1(BOARD, value) ||
+    diagonalCheck2(BOARD, value) ||
+    horizontalCheck(BOARD, value) ||
+    verticalCheck(BOARD, value)
   );
 }
 
-function playAgain() {
-  const confirmation = confirm('Do you want to play again ?');
-  if (confirmation) {
-    return play();
-  }
-  console.log("Thanks for playing... 👋👋");
-}
-
-function placeValue (tile, value, playerNumber) {
+function placeValue(BOARD, tile, value, playerNumber) {
   const box = [
     [0,0], [0,1], [0,2],
     [1,0], [1,1], [1,2],
@@ -71,68 +47,71 @@ function placeValue (tile, value, playerNumber) {
   ];
 
   const [i, j] = box[tile - 1];
-  if(BOARD[i][j] !== "") {
-    console.log("❌ Tile is already filled !");
-    return userInput(playerNumber, value);
+  if (BOARD[i][j] !== '') {
+    console.log("❌ Tile is already filled!");
+    return userInput(BOARD, playerNumber, value);
   }
+
   BOARD[i][j] = value;
 }
 
-function userInput (playerNumber, value) {
+function userInput(BOARD, playerNumber, value) {
   const response = parseInt(
-    prompt(`Player ${playerNumber} :\nEnter the block number : (1-9) : `)
+    prompt(`Player ${playerNumber}:\nEnter the block number (1–9):`)
   );
 
   if (isNaN(response) || response < 1 || response > 9) {
     console.log("❌ Invalid input, try again!");
-    return userInput(playerNumber, value);
+    return userInput(BOARD, playerNumber, value);
   }
 
-  placeValue (response, value, playerNumber);
+  placeValue(BOARD, response, value, playerNumber);
   return response;
 }
 
-function getPlayerMove(playerNumber, playerSymbol) {
-  const playerMove = userInput(playerNumber, playerSymbol);
-  printBoard();
-  return;
+function getPlayerMove(BOARD, playerNumber, playerSymbol) {
+  userInput(BOARD, playerNumber, playerSymbol);
+  printBoard(BOARD);
 }
 
-function checkWinner(playerChar, playerNumber) {
-  if (isWinner(playerChar)) {
+function checkWinner(BOARD, playerChar, playerNumber) {
+  if (isWinner(BOARD, playerChar)) {
     console.log(`🎉 Player ${playerNumber} (${playerChar}) wins!`);
     return true;
   }
   return false;
 }
 
-function play () {
+function playAgain() {
+  const confirmation = confirm('Do you want to play again?');
+  confirmation ? play() : console.log("Thanks for playing 👋");
+}
+
+function play() {
+  const BOARD = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
+  ];
+
   let turnCount = 0;
-  let isGameOver = false;
+  let gameOver = false;
 
-  while(turnCount < 9 && !isGameOver) {
-    printBoard();
-    getPlayerMove(1, 'X');
-    if (checkWinner('X', 1)) {
-      isGameOver = true;
-      return playAgain();
-    }
-    
-    getPlayerMove(2, 'O');
+  while (turnCount < 9 && !gameOver) {
+    printBoard(BOARD);
+    getPlayerMove(BOARD, 1, 'X');
+    gameOver = checkWinner(BOARD, 'X', 1);
+    if (gameOver) return playAgain();
 
-    if (checkWinner('O', 2)) {
-      isGameOver = true;
-      return playAgain();
-    }
+    getPlayerMove(BOARD, 2, 'O');
+    gameOver = checkWinner(BOARD, 'O', 2);
+    if (gameOver) return playAgain();
 
     turnCount++;
   }
 
-  if (!isGameOver) {
-    console.log("🤝 The match is a draw...");
-  }
-
-  playAgain ();
+  console.log("🤝 The match is a draw...");
+  playAgain();
 }
 
 play();
