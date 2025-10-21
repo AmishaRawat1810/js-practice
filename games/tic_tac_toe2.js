@@ -1,17 +1,27 @@
-function printBoard(BOARD){
+function printBoard(board){
   console.clear();
-  for (let i = 0; i < 3; i++) {
-    console.log(BOARD[i].join(' | '));
+  let placeholder = 1;
+  let boardString = "";
+
+  for (let row = 0; row < 3; row++) {
+    let array = [];
+    for (let col = 0; col < 3; col++) {
+      const tile = board[row][col] === "" ? placeholder.toString() : board[row][col];
+      array.push(tile);
+      placeholder++;
+    }
+    boardString += array.join(" | ");
+    boardString += "\n-------------\n";
   }
-  console.log('\n');
+  console.log(boardString);
 }
 
-function mapCombinationWithBoard(BOARD, winCombination, char) {
-  for (let index = 0; index < BOARD.length; index++) {
+function mapCombinationWithBoard(board, winCombination, char) {
+  for (let index = 0; index < board.length; index++) {
     const element = winCombination[index];
     const row = element[0];
     const col = element[1];
-    const isWinCombination = BOARD[row][col] === char;
+    const isWinCombination = board[row][col] === char;
 
     if (!isWinCombination) {
       return false;
@@ -21,7 +31,7 @@ function mapCombinationWithBoard(BOARD, winCombination, char) {
   return true;
 }
 
-function isWinner(BOARD, char) {
+function isWinner(board, char) {
   const winCombination = [
     ["00", "01", "02"],
     ["10", "11", "12"],
@@ -34,7 +44,7 @@ function isWinner(BOARD, char) {
   ];
 
   for (let index = 0; index < winCombination.length; index++) {
-    const win = mapCombinationWithBoard(BOARD, winCombination[index], char);
+    const win = mapCombinationWithBoard(board, winCombination[index], char);
     if (win) {
       return true;
     }
@@ -43,23 +53,23 @@ function isWinner(BOARD, char) {
   return false;
 }
 
-function playAgain(BOARD) {
+function playAgain(board) {
   const confirmation = confirm('Do you want to play again ?');
   if (confirmation) return play();
   console.log("Thanks for playing... 👋👋");
 }
 
-function isTileFilled(BOARD, tile) {
+function isTileFilled(board, tile) {
   const box = [
     [0,0],[0,1],[0,2],
     [1,0],[1,1],[1,2],
     [2,0],[2,1],[2,2]
   ];
   const [i, j] = box[tile - 1];
-  return BOARD[i][j] !== "";
+  return board[i][j] !== "";
 }
 
-function placeValue(BOARD, tile, playerChar, playerNumber) {
+function placeValue(board, tile, playerChar, playerNumber) {
   const box = [
     [0,0], [0,1], [0,2],
     [1,0], [1,1], [1,2],
@@ -67,30 +77,30 @@ function placeValue(BOARD, tile, playerChar, playerNumber) {
   ];
 
   const [i, j] = box[tile - 1];
-  BOARD[i][j] = playerChar;
+  board[i][j] = playerChar;
 }
 
-function userInput(BOARD, playerNumber, playerChar) {
+function userInput(board, playerNumber, playerChar) {
   const tile = parseInt(
     prompt(`Player ${playerNumber} (${playerChar}) : Enter the block number (1–9):`)
   );
 
   if (isNaN(tile) || tile < 1 || tile > 9) {
     console.log("❌ Invalid input, try again!");
-    return userInput(BOARD, playerNumber, playerChar);
+    return userInput(board, playerNumber, playerChar);
   }
 
-  if (isTileFilled(BOARD, tile)) {
+  if (isTileFilled(board, tile)) {
     console.log("❌ Tile already filled! Try again.");
-    return userInput(BOARD, playerNumber, playerChar);
+    return userInput(board, playerNumber, playerChar);
   }
 
-  placeValue(BOARD, tile, playerChar);
-  printBoard(BOARD);
+  placeValue(board, tile, playerChar);
+  printBoard(board);
 }
 
-function checkWinner(BOARD, playerChar, playerNumber) {
-  if (isWinner(BOARD, playerChar)) {
+function checkWinner(board, playerChar, playerNumber) {
+  if (isWinner(board, playerChar)) {
     console.log(`🎉 Player ${playerNumber} (${playerChar}) wins!`);
     return true;
   }
@@ -98,17 +108,17 @@ function checkWinner(BOARD, playerChar, playerNumber) {
 }
 
 function currentPlayer(turn) {
-  return turn % 2 === 0 ? [1, 'X'] : [2, 'O'];
+  return turn % 2 === 0 ? [1, '❌'] : [2, '🟢'];
 }
 
-function makeMove(BOARD, turn) {
+function makeMove(board, turn) {
   const [num, char] = currentPlayer(turn);
-  userInput(BOARD, num, char);
+  userInput(board, num, char);
   return [num, char ];
 }
 
 function play() {
-  const BOARD = [
+  const board = [
     ['', '', ''],
     ['', '', ''],
     ['', '', '']
@@ -118,9 +128,9 @@ function play() {
   let gameOver = false;
 
   while (turn < 9 && !gameOver) {
-    printBoard(BOARD);
-    const [ num, char ] = makeMove(BOARD, turn);
-    gameOver = checkWinner(BOARD, char, num);
+    printBoard(board);
+    const [ num, char ] = makeMove(board, turn);
+    gameOver = checkWinner(board, char, num);
     if (gameOver) return playAgain();
     turn++;
   }
