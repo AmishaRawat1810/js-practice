@@ -101,9 +101,9 @@ function isBlockEmpty(array, playerChosenCoordinate) {
   return array[yCoor][xCoor] !== " ❌ " && array[yCoor][xCoor] !== " 🟢 ";
 }
 
-function getChosenBlockPosition(playerName, playerNum, array) {
-  if (playerNum === 2) {
-    return bot();
+function getChosenBlockPosition(playerName, playerNum, array, index) {
+  if (playerNum === 1) {
+    return bot(array, index);
   }
 
   const playerChoice = getInput(playerName);
@@ -114,42 +114,7 @@ function getChosenBlockPosition(playerName, playerNum, array) {
   }
 
   console.log("Position has already been occupied \n");
-  return getChosenBlockPosition(playerName, playerNum, array);
-}
-
-function startGame(array, p1Name, p2Name) {
-  let turns = 8;
-  let currentTurn = 1;
-  display(array);
-
-  const p1ChosenCoordinate = getChosenBlockPosition(p1Name, 1, array);
-  updateArray(p1ChosenCoordinate, array, " ❌ ");
-  display(array);
-
-  while (currentTurn <= turns) {
-    const p2ChosenCoordinate = getChosenBlockPosition(p2Name, 2, array);
-    updateArray(p2ChosenCoordinate, array, " 🟢 ");
-    display(array);
-
-    if (isPlayerWinner(array, " 🟢 ")) {
-      console.log(`${p2Name} won the game 🎉🎉 \n`);
-      return;
-    }
-
-    const p1ChosenCoordinate = getChosenBlockPosition(p1Name, 1, array);
-    updateArray(p1ChosenCoordinate, array, " ❌ ");
-    display(array);
-
-    if (isPlayerWinner(array, " ❌ ")) {
-      console.log(`${p1Name} won the game 🎉🎉 \n`);
-      return
-    }
-
-    currentTurn += 2;
-    console.log(currentTurn); 
-  }
-
-  console.log("It was draw.");
+  return getChosenBlockPosition(playerName, playerNum, array, index);
 }
 
 function randomStart() {
@@ -164,38 +129,39 @@ function getStartPosition() {
     getCoordinate(7), //3rd row corner
     getCoordinate(9)  //3rd row corner
   ];
-  return startPositions[randomStart];
+  return startPositions[0];
 }
 
-function centerStrategy(startPosition, index) {
+function centerStrategy(array, index) {
   const moves = [
-    getCoordinate(5),
+    getCoordinate(9),
+    getCoordinate(7),
+    getCoordinate(8),
     getCoordinate(1),
     getCoordinate(3),
-    getCoordinate(7),
-    getCoordinate(9)
   ];
 
   if (isBlockEmpty(array, moves[index])) {
-    return playerChosenCoordinate;
+    return moves[index];
   }
 
   console.log("Position has already been occupied \n");
-  return 
+  return centerStrategy(array, index + 1);
 }
 
-function botStrategies(startPosition, botNumber) {
-  if (startPosition === "11") {
-    return centerStrategy;
+function botStrategies(botNumber, array, index) {
+  if (botNumber === 1) {
+    return centerStrategy(array, index);
   }
 
   return cornerStrategy;
 }
 
-function bot() {
+function bot(array, index) {
   // center
   // diagonal corner
   // corner of the same row as before
+  return botStrategies(1, array, index);
 
   // any corner
   // take the corner of samr row as first move
@@ -203,6 +169,43 @@ function bot() {
   // take the corner of the the opposite row where the col is empty
   // if opponent places the next in straight line _ 0 _ | _ _ _ | X 0 X 
   // take the center one.
+}
+
+function startGame(array, p1Name, p2Name) {
+  let turns = 8;
+  let currentTurn = 1;
+  display(array);
+  let term = 0;
+
+  const p1ChosenCoordinate = getStartPosition();
+  updateArray(p1ChosenCoordinate, array, " ❌ ");
+  display(array);
+
+  while (currentTurn <= turns) {
+    const p2ChosenCoordinate = getChosenBlockPosition(p2Name, 2, array, term);
+    updateArray(p2ChosenCoordinate, array, " 🟢 ");
+    display(array);
+
+    if (isPlayerWinner(array, " 🟢 ")) {
+      console.log(`${p2Name} won the game 🎉🎉 \n`);
+      return;
+    }
+
+    const p1ChosenCoordinate = getChosenBlockPosition(p1Name, 1, array, term);
+    term = term + 1;
+    updateArray(p1ChosenCoordinate, array, " ❌ ");
+    display(array);
+
+    if (isPlayerWinner(array, " ❌ ")) {
+      console.log(`${p1Name} won the game 🎉🎉 \n`);
+      return
+    }
+
+    currentTurn += 2;
+    console.log(currentTurn); 
+  }
+
+  console.log("It was draw.");
 }
 
 function config() {
