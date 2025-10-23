@@ -141,6 +141,10 @@ function centerStrategy(array, index) {
     getCoordinate(3),
   ];
 
+  const moves2 = [
+    //
+  ];
+
   if (isBlockEmpty(array, moves[index])) {
     return moves[index];
   }
@@ -214,7 +218,7 @@ function config() {
     [" 4  ", " 5  ", " 6 "],
     [" 7  ", " 8  ", " 9 "],
   ];
-  const p1Name = prompt("Enter your name (p1) : ");
+  const p1Name = "bot";
   const p2Name = prompt("Enter your name (p2) : ")
 
   console.log(`${p1Name} marker : " ❌ "`);
