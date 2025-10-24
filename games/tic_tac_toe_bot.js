@@ -143,7 +143,7 @@ function findDiagonalCorner(array) {
 }
 
 function findAdjacentCorner(array) {
-  const adjacentCorners = ["02", "00", "22", "20"];
+  const adjacentCorners = ["02", "00", "20", "22"];
   for (let i = 0; i < adjacentCorners.length; i++) {
     if (isBlockEmpty(array, adjacentCorners[i])) {
       return adjacentCorners[i];
@@ -158,6 +158,7 @@ function moveToCorner(array, opponentMoves) {
   if (lastMove === "11") {
     return findDiagonalCorner(array);
   }
+
   return findAdjacentCorner(array);
 }
 
