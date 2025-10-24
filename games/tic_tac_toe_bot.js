@@ -133,7 +133,7 @@ function moveBesideCenter(array, opponentLastMove) {
 }
 
 function findDiagonalCorner(array) {
-  const diagonalCorners = ["00", "22", "02", "20"];
+  const diagonalCorners = ["00", "22", "00", "02", "20", "20"];
   for (let i = 0; i < diagonalCorners.length; i++) {
     if (isBlockEmpty(array, diagonalCorners[i])) {
       return diagonalCorners[i];
@@ -142,24 +142,33 @@ function findDiagonalCorner(array) {
   return -1;
 }
 
-function findAdjacentCorner(array) {
-  const adjacentCorners = ["02", "00", "20", "22"];
-  for (let i = 0; i < adjacentCorners.length; i++) {
-    if (isBlockEmpty(array, adjacentCorners[i])) {
-      return adjacentCorners[i];
+function findAdjacentCorner(array, lastMove) {
+  const outerCorners = ["00", "02", "20", "22"];
+  const adjacentCorners = ["10", "22", "12", "20", "21", "20", "01", "22"];
+  const sideBlocks = ["01", "10", "12", "21"];
+  const isSideBlock = sideBlocks.includes(lastMove);
+
+  const move = adjacentCorners.indexOf(lastMove);
+
+  if (isSideBlock && move !== -1 && move + 1 < adjacentCorners.length) {
+    return adjacentCorners[move + 1];
+  }
+
+  for (let i = 0; i < outerCorners.length; i++) {
+    if (isBlockEmpty(array, outerCorners[i])) {
+      return outerCorners[i];
     }
   }
+
   return -1;
 }
 
-function moveToCorner(array, opponentMoves) {
-  const lastMove = opponentMoves[opponentMoves.length - 1];
-
+function moveToCorner(array, lastMove) {
   if (lastMove === "11") {
     return findDiagonalCorner(array);
   }
 
-  return findAdjacentCorner(array);
+  return findAdjacentCorner(array, lastMove);
 }
 
 function findWinningMove (array, playerSymbol) {
@@ -201,11 +210,11 @@ function getBotPosition(p1Name, array) {
   if (opponentWinMove !== -1) return opponentWinMove;
 
   //take corner : diagonal / adjacent
-  const nextMove = moveToCorner(array, opponentMoves);
+  const lastMove = opponentMoves[opponentMoves.length - 1];
+  const nextMove = moveToCorner(array, lastMove);
   if (nextMove !== -1) return nextMove;
 
   //take any block beside center
-  const lastMove = opponentMoves[opponentMoves.length - 1];
   return moveBesideCenter(array, lastMove);
 }
 
@@ -262,6 +271,8 @@ function config() {
   startGame(array, p1Name, p2Name);
 
   if (confirm("Do you wanna play again ? ")) {
+    opponentMoves = [];
+    botMoves = [];
     config();
   }
 }
