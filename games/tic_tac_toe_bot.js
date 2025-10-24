@@ -168,8 +168,8 @@ function findWinningMove(array, playerSymbol) {
 
     for (let j = 0; j < 3; j++) {
       const pos = winCombination[i][j];
-      const y = parseInt(pos[0], 10);
-      const x = parseInt(pos[1], 10);
+      const y = parseInt(pos[0]);
+      const x = parseInt(pos[1]);
 
       if (array[y][x] === playerSymbol) {
         count++;
