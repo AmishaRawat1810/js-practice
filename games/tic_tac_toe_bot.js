@@ -42,30 +42,19 @@ function display(array) {
   console.log("\n------------------------------------------\n")
 }
 
-function isWinningCombination(array, winCombination, char) {
-  for (let index = 0; index < winCombination.length; index++) {
-    const currentElement = winCombination[index];
-    const xCoor = currentElement[1];
-    const yCoor = currentElement[0];
-
-    if (array[yCoor][xCoor] !== char) {
-      return false;
-    }
+function isWinningCombination(array, combination, char) {
+  for (let i = 0; i < combination.length; i++) {
+    const y = parseInt(combination[i][0]);
+    const x = parseInt(combination[i][1]);
+    if (array[y][x] !== char) return false;
   }
-
   return true;
 }
 
 function isPlayerWinner(array, char) {
-  let isWinner = false;
-
-  for (let index = 0; index < winCombination.length; index++) {
-    isWinner = isWinningCombination(array, winCombination[index], char);
-    if (isWinner) {
-      return true;
-    }
+  for (let i = 0; i < winCombination.length; i++) {
+    if (isWinningCombination(array, winCombination[i], char)) return true;
   }
-
   return false;
 }
 
@@ -101,8 +90,8 @@ function getCoordinate(chosenBox) {
 function isBlockEmpty(array, playerChosenCoordinate) {
   const yCoor = parseInt(playerChosenCoordinate[0]);
   const xCoor = parseInt(playerChosenCoordinate[1]);
-
-  return array[yCoor][xCoor] !== " ❌ " && array[yCoor][xCoor] !== " 🟢 ";
+  const block = array[yCoor][xCoor];
+  return block !== " ❌ " && block !== " 🟢 ";
 }
 
 function getChosenBlockPosition(playerName, array) {
@@ -123,6 +112,7 @@ function moveBesideCenter(array, opponentLastMove) {
   if (opponentLastMove < 4 && isBlockEmpty(botMove)) {
       return botMove;
   }
+
   //play opposite block, beside center if greater than 3
   botMove = getCoordinate((opponentLastMove % 4) + 2);
   if (isBlockEmpty(botMove)) {
@@ -171,37 +161,33 @@ function moveToCorner(array, lastMove) {
   return findAdjacentCorner(array, lastMove);
 }
 
-function findWinningMove (array, playerSymbol) {
-  for (let index = 0; index < winCombination.length; index++) {
+function findWinningMove(array, playerSymbol) {
+  for (let i = 0; i < winCombination.length; i++) {
     let count = 0;
-    let emptyPosition = -1;
-    const [a, b, c] = winCombination[index];
+    let emptyPosition = null;
 
-    for (let term = 0; term < 3; term++) {
-      const position = winCombination[index][term];
-      const coordinateY = position[0];
-      const coordinateX = position[1];
+    for (let j = 0; j < 3; j++) {
+      const pos = winCombination[i][j];
+      const y = parseInt(pos[0], 10);
+      const x = parseInt(pos[1], 10);
 
-      if (array[coordinateY][coordinateX] === playerSymbol) {
+      if (array[y][x] === playerSymbol) {
         count++;
-      } else if (isBlockEmpty(array, position)) {
-        emptyPosition = position;
+      } else if (isBlockEmpty(array, pos)) {
+        emptyPosition = pos;
       }
     }
 
-    if (count === 2 && emptyPosition !== -1) {
+    if (count === 2 && emptyPosition) {
       return emptyPosition;
     }
   }
-
   return -1;
 }
 
 function getBotPosition(p1Name, array) {
   const botSymbol = " ❌ ";
   const playerSymbol = " 🟢 ";
-  
-  //move to win
   const botWinMove = findWinningMove(array, botSymbol);
   if (botWinMove !== -1) return botWinMove;
   
