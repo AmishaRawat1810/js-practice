@@ -271,8 +271,6 @@ function config() {
   startGame(array, p1Name, p2Name);
 
   if (confirm("Do you wanna play again ? ")) {
-    opponentMoves = [];
-    botMoves = [];
     config();
   }
 }
