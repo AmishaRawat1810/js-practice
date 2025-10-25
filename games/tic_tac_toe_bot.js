@@ -108,12 +108,13 @@ function getChosenBlockPosition(playerName, array) {
 function moveBesideCenter(array, opponentLastMove) {
   let botMove = getCoordinate(10 - opponentLastMove);
 
-  //play opposite block, beside center if less than 4
+  // play opposite block, beside center if opponent chose 1,2,3
   if (opponentLastMove < 4 && isBlockEmpty(array, botMove)) {
-      return botMove;
+    return botMove;
   }
 
-  //play opposite block, beside center if greater than 3
+  // play opposite block, beside center if opponent chose 4-9
+  botMove = getCoordinate((opponentLastMove % 4) + 2);
   if (isBlockEmpty(array, botMove)) {
     return botMove;
   }
