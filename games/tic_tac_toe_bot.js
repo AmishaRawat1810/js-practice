@@ -223,7 +223,7 @@ function config() {
     [" 4  ", " 5  ", " 6 "],
     [" 7  ", " 8  ", " 9 "],
   ];
-  const p1Name = "bot";
+  const p1Name = "The Omniscient Bot";
   const p2Name = prompt("Enter your name (p2) : ")
 
   console.log(`${p1Name} marker : " ❌ "`);
