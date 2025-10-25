@@ -9,8 +9,8 @@ const winCombination = [
     ["02", "11", "20"],
 ];
 
-const botMoves = [];
-const opponentMoves = [];
+let botMoves = [];
+let opponentMoves = [];
 
 function pad(count, string, char) {
   let paddedString = string.padStart(string.length + count, char);
@@ -37,7 +37,6 @@ function displayArray(array) {
 }
 
 function display(array) {
-  console.clear();
   displayArray(array);
   console.log("\n------------------------------------------\n")
 }
@@ -107,7 +106,7 @@ function getChosenBlockPosition(playerName, array) {
 }
 
 function moveBesideCenter(array, opponentLastMove) {
-  let botMove = getCoordinate(Math.max(1, Math.min(9, 10 - opponentLastMove)));
+  let botMove = getCoordinate(10 - opponentLastMove);
 
   //play opposite block, beside center if less than 4
   if (opponentLastMove < 4 && isBlockEmpty(array, botMove)) {
@@ -115,7 +114,6 @@ function moveBesideCenter(array, opponentLastMove) {
   }
 
   //play opposite block, beside center if greater than 3
-  botMove = getCoordinate(10 - opponentLastMove);
   if (isBlockEmpty(array, botMove)) {
     return botMove;
   }
@@ -157,7 +155,7 @@ function findWinningMove(array, playerSymbol) {
   return -1;
 }
 
-function getBotPosition(p1Name, array, turn) {
+function getBotPosition(array, turn) {
   const botSymbol = " ❌ ";
   const playerSymbol = " 🟢 ";
   const lastMove = opponentMoves[opponentMoves.length - 1];
@@ -166,17 +164,21 @@ function getBotPosition(p1Name, array, turn) {
   const botWinMove = findWinningMove(array, botSymbol);
   if (botWinMove !== -1) return botWinMove;
   
+  //Block opponent winning position
   const opponentWinMove = findWinningMove(array, playerSymbol);
   if (opponentWinMove !== -1) return opponentWinMove;
 
+  //Take the center
   const center = getCoordinate(5);
   if(isBlockEmpty(array, center) && turn !== 1) {
     return center;
   }
 
+  //Take any corner
   const nextMove = findBestCorner(array);
   if (nextMove !== -1) return nextMove;
 
+  //Take the block beside center
   return moveBesideCenter(array, lastMove);
 }
 
@@ -185,7 +187,7 @@ function startGame(array, p1Name, p2Name) {
   let currentTurn = 1;
   display(array);
 
-  const p1ChosenCoordinate = getBotPosition(p1Name, array, currentTurn);
+  const p1ChosenCoordinate = getBotPosition(array, currentTurn);
   botMoves.push(p1ChosenCoordinate);
   updateArray(p1ChosenCoordinate, array, " ❌ ");
   display(array);
