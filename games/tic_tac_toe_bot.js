@@ -1,4 +1,4 @@
-const winCombination = [
+const WIN_COMBINATIONS = [
     ["00", "01", "02"],
     ["10", "11", "12"],
     ["20", "21", "22"],
@@ -51,8 +51,8 @@ function isWinningCombination(array, combination, char) {
 }
 
 function isPlayerWinner(array, char) {
-  for (let i = 0; i < winCombination.length; i++) {
-    if (isWinningCombination(array, winCombination[i], char)) return true;
+  for (let i = 0; i < WIN_COMBINATIONS.length; i++) {
+    if (isWinningCombination(array, WIN_COMBINATIONS[i], char)) return true;
   }
   return false;
 }
@@ -86,7 +86,7 @@ function getCoordinate(chosenBox) {
   return coordinates[chosenBox - 1];
 }
 
-function isBlockEmpty(array, playerChosenCoordinate) {
+function checkIsBlockEmpty(array, playerChosenCoordinate) {
   const yCoor = parseInt(playerChosenCoordinate[0]);
   const xCoor = parseInt(playerChosenCoordinate[1]);
   const block = array[yCoor][xCoor];
@@ -97,7 +97,7 @@ function getChosenBlockPosition(playerName, array) {
   const playerChoice = getInput(playerName);
   const playerChosenCoordinate = getCoordinate(playerChoice);
 
-  if (isBlockEmpty(array, playerChosenCoordinate)) {
+  if (checkIsBlockEmpty(array, playerChosenCoordinate)) {
     return playerChosenCoordinate;
   }
 
@@ -109,13 +109,13 @@ function moveBesideCenter(array, opponentLastMove) {
   let botMove = getCoordinate(10 - opponentLastMove);
 
   // play opposite block, beside center if opponent chose 1,2,3
-  if (opponentLastMove < 4 && isBlockEmpty(array, botMove)) {
+  if (opponentLastMove < 4 && checkIsBlockEmpty(array, botMove)) {
     return botMove;
   }
 
   // play opposite block, beside center if opponent chose 4-9
   botMove = getCoordinate((opponentLastMove % 4) + 2);
-  if (isBlockEmpty(array, botMove)) {
+  if (checkIsBlockEmpty(array, botMove)) {
     return botMove;
   }
 
@@ -125,7 +125,7 @@ function moveBesideCenter(array, opponentLastMove) {
 function findBestCorner(array) {
   const corners = ["00", "02", "20", "22"];
   for (let index = 0; index < corners.length; index++) {
-    if (isBlockEmpty(array, corners[index])) {
+    if (checkIsBlockEmpty(array, corners[index])) {
       return corners[index];
     }
   }
@@ -133,18 +133,18 @@ function findBestCorner(array) {
 }
 
 function findWinningMove(array, playerSymbol) {
-  for (let i = 0; i < winCombination.length; i++) {
+  for (let i = 0; i < WIN_COMBINATIONS.length; i++) {
     let count = 0;
     let emptyPosition = null;
 
     for (let j = 0; j < 3; j++) {
-      const pos = winCombination[i][j];
+      const pos = WIN_COMBINATIONS[i][j];
       const y = parseInt(pos[0]);
       const x = parseInt(pos[1]);
 
       if (array[y][x] === playerSymbol) {
         count++;
-      } else if (isBlockEmpty(array, pos)) {
+      } else if (checkIsBlockEmpty(array, pos)) {
         emptyPosition = pos;
       }
     }
@@ -171,9 +171,7 @@ function getBotPosition(array, turn) {
 
   //Take the center
   const center = getCoordinate(5);
-  console.log(array);
-  if(isBlockEmpty(array, center) && turn !== 1) {
-    console.log("hello",center);
+  if(checkIsBlockEmpty(array, center) && turn !== 1) {
     return center;
   }
 
