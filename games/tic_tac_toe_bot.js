@@ -107,15 +107,16 @@ function getChosenBlockPosition(playerName, array) {
 }
 
 function moveBesideCenter(array, opponentLastMove) {
-  let botMove = getCoordinate(10 - opponentLastMove);
+  let botMove = getCoordinate(Math.max(1, Math.min(9, 10 - opponentLastMove)));
+
   //play opposite block, beside center if less than 4
-  if (opponentLastMove < 4 && isBlockEmpty(botMove)) {
+  if (opponentLastMove < 4 && isBlockEmpty(array, botMove)) {
       return botMove;
   }
 
   //play opposite block, beside center if greater than 3
-  botMove = getCoordinate((opponentLastMove % 4) + 2);
-  if (isBlockEmpty(botMove)) {
+  botMove = getCoordinate(10 - opponentLastMove);
+  if (isBlockEmpty(array, botMove)) {
     return botMove;
   }
 
@@ -159,24 +160,23 @@ function findWinningMove(array, playerSymbol) {
 function getBotPosition(p1Name, array, turn) {
   const botSymbol = " ❌ ";
   const playerSymbol = " 🟢 ";
+  const lastMove = opponentMoves[opponentMoves.length - 1];
+
+  //Check if bot can win
   const botWinMove = findWinningMove(array, botSymbol);
   if (botWinMove !== -1) return botWinMove;
   
-  //block the opponent
   const opponentWinMove = findWinningMove(array, playerSymbol);
   if (opponentWinMove !== -1) return opponentWinMove;
 
-  //take the center
   const center = getCoordinate(5);
   if(isBlockEmpty(array, center) && turn !== 1) {
     return center;
   }
 
-  //take corner
   const nextMove = findBestCorner(array);
   if (nextMove !== -1) return nextMove;
 
-  //take any block beside center
   return moveBesideCenter(array, lastMove);
 }
 
@@ -208,7 +208,7 @@ function startGame(array, p1Name, p2Name) {
 
     if (isPlayerWinner(array, " ❌ ")) {
       console.log(`${p1Name} won the game 🎉🎉 \n`);
-      return
+      return;
     }
 
     currentTurn += 2;
@@ -240,4 +240,4 @@ function main() {
   config();
 }
 
-main(); 
+main();
