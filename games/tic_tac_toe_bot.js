@@ -122,43 +122,14 @@ function moveBesideCenter(array, opponentLastMove) {
   return -1;
 }
 
-function findDiagonalCorner(array) {
-  const diagonalCorners = ["00", "22", "00", "02", "20", "20"];
-  for (let i = 0; i < diagonalCorners.length; i++) {
-    if (isBlockEmpty(array, diagonalCorners[i])) {
-      return diagonalCorners[i];
+function findBestCorner(array) {
+  const corners = ["00", "02", "20", "22"];
+  for (let index = 0; index < corners.length; index++) {
+    if (isBlockEmpty(array, corners[index])) {
+      return corners[index];
     }
   }
   return -1;
-}
-
-function findAdjacentCorner(array, lastMove) {
-  const outerCorners = ["00", "02", "20", "22"];
-  const adjacentCorners = ["10", "22", "12", "20", "21", "20", "01", "22"];
-  const sideBlocks = ["01", "10", "12", "21"];
-  const isSideBlock = sideBlocks.includes(lastMove);
-
-  const move = adjacentCorners.indexOf(lastMove);
-
-  if (isSideBlock && move !== -1 && move + 1 < adjacentCorners.length) {
-    return adjacentCorners[move + 1];
-  }
-
-  for (let i = 0; i < outerCorners.length; i++) {
-    if (isBlockEmpty(array, outerCorners[i])) {
-      return outerCorners[i];
-    }
-  }
-
-  return -1;
-}
-
-function moveToCorner(array, lastMove) {
-  if (lastMove === "11") {
-    return findDiagonalCorner(array);
-  }
-
-  return findAdjacentCorner(array, lastMove);
 }
 
 function findWinningMove(array, playerSymbol) {
@@ -185,7 +156,7 @@ function findWinningMove(array, playerSymbol) {
   return -1;
 }
 
-function getBotPosition(p1Name, array) {
+function getBotPosition(p1Name, array, turn) {
   const botSymbol = " ❌ ";
   const playerSymbol = " 🟢 ";
   const botWinMove = findWinningMove(array, botSymbol);
@@ -195,9 +166,14 @@ function getBotPosition(p1Name, array) {
   const opponentWinMove = findWinningMove(array, playerSymbol);
   if (opponentWinMove !== -1) return opponentWinMove;
 
-  //take corner : diagonal / adjacent
-  const lastMove = opponentMoves[opponentMoves.length - 1];
-  const nextMove = moveToCorner(array, lastMove);
+  //take the center
+  const center = getCoordinate(5);
+  if(isBlockEmpty(array, center) && turn !== 1) {
+    return center;
+  }
+
+  //take corner
+  const nextMove = findBestCorner(array);
   if (nextMove !== -1) return nextMove;
 
   //take any block beside center
@@ -209,7 +185,7 @@ function startGame(array, p1Name, p2Name) {
   let currentTurn = 1;
   display(array);
 
-  const p1ChosenCoordinate = getBotPosition(p1Name, array);
+  const p1ChosenCoordinate = getBotPosition(p1Name, array, currentTurn);
   botMoves.push(p1ChosenCoordinate);
   updateArray(p1ChosenCoordinate, array, " ❌ ");
   display(array);
@@ -225,7 +201,7 @@ function startGame(array, p1Name, p2Name) {
       return;
     }
 
-    const p1ChosenCoordinate = getBotPosition(p1Name, array);
+    const p1ChosenCoordinate = getBotPosition(p1Name, array, currentTurn);
     botMoves.push(p1ChosenCoordinate);
     updateArray(p1ChosenCoordinate, array, " ❌ ");
     display(array);
@@ -236,7 +212,6 @@ function startGame(array, p1Name, p2Name) {
     }
 
     currentTurn += 2;
-    console.log(currentTurn); 
   }
 
   console.log("It was draw.");
