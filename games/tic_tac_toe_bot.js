@@ -171,7 +171,9 @@ function getBotPosition(array, turn) {
 
   //Take the center
   const center = getCoordinate(5);
+  console.log(array);
   if(isBlockEmpty(array, center) && turn !== 1) {
+    console.log("hello",center);
     return center;
   }
 
@@ -204,7 +206,7 @@ function startGame(array, p1Name, p2Name) {
       return;
     }
 
-    const p1ChosenCoordinate = getBotPosition(p1Name, array, currentTurn);
+    const p1ChosenCoordinate = getBotPosition(array, currentTurn);
     botMoves.push(p1ChosenCoordinate);
     updateArray(p1ChosenCoordinate, array, " ❌ ");
     display(array);
