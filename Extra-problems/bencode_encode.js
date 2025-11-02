@@ -1,3 +1,4 @@
+
 function encodeList (inputValue) {
   let index = 0;
   let encodedList = "l";
@@ -52,9 +53,13 @@ function heading (text) {
 function testForInteger () {
   heading("TEST FOR INTEGERS");
   testCode ("1 digit INTEGER", 1, "i1e");
+  testCode ("1 digit Negative INTEGER", -1, "i-1e");
   testCode ("2 digit INTEGER", 12, "i12e");
+  testCode ("2 digit Negative INTEGER", -12, "i-12e");
   testCode ("3 digit INTEGER", 123, "i123e");
-  testCode ("< 3 digit INTEGER", 12345, "i12345e");
+  testCode ("3 digit Negative INTEGER", -123, "i-123e");
+  testCode ("3+ digit INTEGER", 12345, "i12345e");
+  testCode ("3- digit Negative INTEGER", -12345, "i-12345e");
   testCode ("All digits are same", 1111, "i1111e");
   console.log('\n');
 }
