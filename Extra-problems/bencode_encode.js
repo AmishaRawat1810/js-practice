@@ -22,7 +22,7 @@ function encode (inputValue) {
   }
 }
 
-function formatText(inputs, actualOutput, expectedOutput) {
+function formatText (inputs, actualOutput, expectedOutput) {
   return `
   Inputs  : ${inputs}
   Actual  : ${actualOutput}
@@ -30,7 +30,7 @@ function formatText(inputs, actualOutput, expectedOutput) {
   ----`;
 }
 
-function testCode(description, inputValue, expectedOutput) {
+function testCode (description, inputValue, expectedOutput) {
   const actualOutput = encode (inputValue);
   const isEqual = actualOutput === expectedOutput;
   const symbol = isEqual ? "✅" : "❌";
