@@ -78,7 +78,7 @@ function decode (inputValue) {
   return result;
 }
 
-function formatText(inputs, actualOutput, expectedOutput) {
+function formatText (inputs, actualOutput, expectedOutput) {
   return `
   Inputs  : ${inputs}
   Actual  : ${actualOutput}
@@ -86,7 +86,7 @@ function formatText(inputs, actualOutput, expectedOutput) {
   ----`;
 }
 
-function testCode(description, inputValue, expectedOutput) {
+function testCode (description, inputValue, expectedOutput) {
   const actualOutput = decode (inputValue);
   const isEqual = areDeepEqual (actualOutput, expectedOutput) || (actualOutput === expectedOutput);
   const symbol = isEqual ? "✅" : "❌";
