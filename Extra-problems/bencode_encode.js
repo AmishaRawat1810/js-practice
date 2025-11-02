@@ -1,4 +1,3 @@
-
 function encodeList (inputValue) {
   let index = 0;
   let encodedList = "l";
