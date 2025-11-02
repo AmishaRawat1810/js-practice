@@ -61,6 +61,7 @@ function testForInteger () {
 
 function testForString () {
   heading("TEST FOR BYTE STRINGS");
+  testCode ("Char in string : 0", "", "0:");
   testCode ("Char in string : 1", "a", "1:a");
   testCode ("Char in string : 2", "ab", "2:ab");
   testCode ("Char in string : < 3", "abcde", "5:abcde");
@@ -70,6 +71,7 @@ function testForString () {
 
 function testForList () {
   heading("TEST FOR LISTS");
+  testCode ("Empty List", [], "le");
   testCode ("List with 1 integer", [1], "li1ee");
   testCode ("List with < 2 integer", [1, 2, 3], "li1ei2ei3ee");
   testCode ("List with 1 character", ['a'], "l1:ae");
