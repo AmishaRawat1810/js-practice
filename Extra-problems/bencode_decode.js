@@ -17,7 +17,7 @@ function decodeInteger (input, start) {
 function decodeList (input, start) {
   const decodedList = [];
   let index = start + 1; //skip 'l'
-
+//l1:a5:helloe
   while (input[index] !== "e") {
     const [element, nextIndex] = callDecodeFor (input[index], input, index);
     decodedList.push(element);
@@ -103,7 +103,8 @@ function testForList () {
   testCode ("Elements in list : 2, integer (-,+)", "li-1ei2ee", [-1,2]);
   testCode ("Elements in list : 1, empty string", "l0:e", [""]);
   testCode ("Elements in list : 2, string", "l1:a5:helloe", ["a", "hello"]);
-  testCode ("Elements in list : 2, special character", "l1:a5:%$#@!e", ["a", "%$#@!"]);
+  testCode ("Elements in list : 5, string of e", "l5:eeeeee", ["eeeee"]);
+  testCode ("Elements in list : 2, nested string", "l1:al5:helloee", ["a", ["hello"]]);
   console.log('\n');
 }
 
