@@ -1,35 +1,3 @@
-function isArray(x) {
-  return typeof x === 'object';
-}
-
-function areElementSame(array1, array2) {
-  let subResult = true;
-
-  if (array1.length !== array2.length) {
-    return false;
-  }
-
-  for (let index = 0; index < array1.length; index++) {
-    if (isArray(array1[index])) {
-      subResult = areElementSame(array1[index], array2[index]);
-    }
-
-    if (array1[index] !== array2[index] && !isArray(array1[index])) {
-      subResult = false;
-    }
-  }
-
-  return subResult;
-}
-
-function areDeepEqual(array1, array2) {
-  if (isArray(array1) !== isArray(array2)) {
-    return false;
-  }
-
-  return isArray(array1) && areElementSame(array1, array2);
-}
-
 function decodeByteString (input, start) {
   const colonIndex = input.indexOf(":", start);
   const length = parseInt(input.slice(start, colonIndex)); //gives the length of the string
@@ -88,7 +56,7 @@ function formatText (inputs, actualOutput, expectedOutput) {
 
 function testCode (description, inputValue, expectedOutput) {
   const actualOutput = decode (inputValue);
-  const isEqual = areDeepEqual (actualOutput, expectedOutput) || (actualOutput === expectedOutput);
+  const isEqual = actualOutput.toString() === expectedOutput.toString();
   const symbol = isEqual ? "✅" : "❌";
 
   const headline = `${symbol} ${description}`;
