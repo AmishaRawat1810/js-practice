@@ -17,7 +17,7 @@ function decodeInteger (input, start) {
 function decodeList (input, start) {
   const decodedList = [];
   let index = start + 1; //skip 'l'
-//l1:a5:helloe
+
   while (input[index] !== "e") {
     const [element, nextIndex] = callDecodeFor (input[index], input, index);
     decodedList.push(element);
