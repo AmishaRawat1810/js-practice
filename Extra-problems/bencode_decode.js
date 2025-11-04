@@ -1,16 +1,27 @@
+const INVALID = "Invalid";
+
+function validInteger (num) {
+ return isNaN(num);
+}
+
 function decodeByteString (input, start) {
   const colonIndex = input.indexOf(":", start);
-  const length = parseInt(input.slice(start, colonIndex)); //gives the length of the string
+  const length = +(input.slice(start, colonIndex)); //gives the length of the string
+  if (validInteger(length)) {
+    return [INVALID];
+  }
+
   const end = colonIndex + 1 + length;
   const decodedString = input.slice(colonIndex + 1, end); //slice the original string
-
   return [decodedString, end];
 }
 
 function decodeInteger (input, start) {
   const end = input.indexOf("e", start); // where the number ends
-  const decodedInteger = parseInt(input.slice(start + 1, end)); // slice to get the number
-
+  const decodedInteger = +(input.slice(start + 1, end)); // slice to get the number
+  if (validInteger(decodedInteger)) {
+    return [INVALID];
+  }
   return [decodedInteger, end + 1]; //skip the 'e' as well
 }
 
@@ -82,6 +93,7 @@ function testForInteger () {
   testCode ("Digit in Integer : negative, 1", "i-1e", -1);
   testCode ("Digit in Integer : negative, 2", "i-12e", -12);
   testCode ("Digit in Integer : negative, > 2", "i-1234e", -1234);
+  testCode ("Invalid Integer : char in between", "i-123ad4e", INVALID);
   console.log('\n');
 }
 
