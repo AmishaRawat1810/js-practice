@@ -4,8 +4,10 @@ function isInvalidNum(num) {
   return isNaN(num);
 }
 
-function isInvalidStringLength(string, length) {
-  return string.length !== length;
+function isInvalidString(input, string, length) {
+  const validLength = string.length !== length;
+
+  return validLength;
 }
 
 function decodeByteString(input, start) {
@@ -19,11 +21,11 @@ function decodeByteString(input, start) {
   const end = colonIndex + 1 + length;
   const decodedString = input.slice(colonIndex + 1, end); //slice the original string
 
-  if (isInvalidStringLength(decodedString, length)) {
+  if (isInvalidString(input, decodedString, length)) {
     return [INVALID];
   }
 
-  return [decodedString, end];
+  return [decodedString, end + 1];
 }
 
 function decodeInteger(input, start) {
@@ -42,9 +44,6 @@ function decodeList(input, start) {
 
   while (input[index] !== "e") {
     const [element, nextIndex] = callDecodeFor(input[index], input, index);
-    if (element === INVALID) {
-      return [INVALID];
-    }
     decodedList.push(element);
     index = nextIndex;
   }
@@ -133,7 +132,7 @@ function testForList() {
   testCode("Elements in list : 2, integer (+,+)", "li1ei2ee", [1, 2]);
   testCode("Elements in list : 2, integer (-,-)", "li-1ei-2ee", [-1, -2]);
   testCode("Elements in list : 2, integer (-,+)", "li-1ei2ee", [-1, 2]);
-  testCode("Elements in list : 1, empty string", "l0:e", [""]);
+  testCode("Elements in list : 1, empty string", "l0:ei1e", ["", 1]);
   testCode("Elements in list : 2, string", "l1:a5:helloe", ["a", "hello"]);
   testCode("Invalid : length : 5, elements : 6", "l5:eeeeeee", INVALID);
   testCode("Elements in list : 2, nested string", "l1:al5:helloee", ["a", ["hello"]]);
