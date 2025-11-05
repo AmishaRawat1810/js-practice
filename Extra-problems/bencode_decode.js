@@ -135,7 +135,7 @@ function testForList() {
   testCode("Elements in list : 2, integer (-,+)", "li-1ei2ee", [-1, 2]);
   testCode("Elements in list : 1, empty string", "l0:e", [""]);
   testCode("Elements in list : 2, string", "l1:a5:helloe", ["a", "hello"]);
-  testCode("Invalid : length : 5, elements : 6", "l5:eeeeee", INVALID);
+  testCode("Invalid : length : 5, elements : 6", "l5:eeeeeee", INVALID);
   testCode("Elements in list : 2, nested string", "l1:al5:helloee", ["a", ["hello"]]);
   console.log('\n');
 }
