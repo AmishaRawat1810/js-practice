@@ -1,15 +1,20 @@
 const INVALID = "Invalid";
 
-function validInteger(num) {
+function isInvalidNum(num) {
   return isNaN(num);
+}
+function isInvalidString(string, length) {
+  return string.length !== length;
 }
 
 function decodeByteString(input, start) {
   const colonIndex = input.indexOf(":", start);
   const length = +(input.slice(start, colonIndex)); //gives the length of the string
-  if (validInteger(length)) {
+
+  if (isInvalidNum(length)) {
     return [INVALID];
   }
+
   const end = colonIndex + 1 + length;
   const decodedString = input.slice(colonIndex + 1, end); //slice the original string
 
@@ -19,7 +24,7 @@ function decodeByteString(input, start) {
 function decodeInteger(input, start) {
   const end = input.indexOf("e", start); // where the number ends
   const decodedInteger = +(input.slice(start + 1, end)); // slice to get the number
-  if (validInteger(decodedInteger)) {
+  if (isInvalidNum(decodedInteger)) {
     return [INVALID];
   }
   return [decodedInteger, end + 1]; //skip the 'e' as well
@@ -100,10 +105,10 @@ function testForInteger() {
 function testForString() {
   heading("TEST FOR BYTE STRINGS");
   testCode("Char in string : 0", "0:", "");
-  testCode("Char in string : 1", "1:a", "a");
-  testCode("Char in string : 2", "2:ab", "ab");
-  testCode("Char in string : > 2", "4:abcd", "abcd");
+  testCode("Char in string : > 4", "4:abcd", "abcd");
   testCode("Char in string : special", "6:%$#@!&", "%$#@!&");
+  testCode("INVALID length contains char", "2vv:ab", INVALID);
+  testCode("INVALID string, < length", "1:1ab", INVALID);
   console.log('\n');
 }
 
