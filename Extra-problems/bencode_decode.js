@@ -1,15 +1,17 @@
 const INVALID = "Invalid";
 
-function isInvalidNum (num) {
+function isInvalidNum(num) {
   return isNaN(num);
 }
 
-function isInvalidString (input, string, length) {
+function isInvalidStringLength(string, length) {
   return string.length !== length;
 }
 
-function decodeByteString (input, start) {
+function decodeByteString(input, start) {
   const colonIndex = input.indexOf(":", start);
+  if (colonIndex === -1) return [INVALID];
+
   const length = +(input.slice(start, colonIndex)); //gives the length of the string
   if (isInvalidNum(length)) {
     return [INVALID];
@@ -17,15 +19,16 @@ function decodeByteString (input, start) {
   const end = colonIndex + 1 + length;
   const decodedString = input.slice(colonIndex + 1, end); //slice the original string
 
-  if (isInvalidString(input, decodedString, length)) {
+  if (isInvalidStringLength(decodedString, length)) {
     return [INVALID];
   }
 
   return [decodedString, end];
 }
 
-function decodeInteger (input, start) {
+function decodeInteger(input, start) {
   const end = input.indexOf("e", start); // where the number ends
+  if (end === -1) return [INVALID];
   const decodedInteger = +(input.slice(start + 1, end)); // slice to get the number
   if (isInvalidNum(decodedInteger)) {
     return [INVALID];
@@ -33,12 +36,12 @@ function decodeInteger (input, start) {
   return [decodedInteger, end + 1]; //skip the 'e' as well
 }
 
-function decodeList (input, start) {
+function decodeList(input, start) {
   const decodedList = [];
   let index = start + 1; //skip 'l'
 
   while (input[index] !== "e") {
-    const [element, nextIndex] = callDecodeFor (input[index], input, index);
+    const [element, nextIndex] = callDecodeFor(input[index], input, index);
     if (element === INVALID) {
       return [INVALID];
     }
@@ -53,13 +56,13 @@ function decodeList (input, start) {
   return [decodedList, index + 1];
 }
 
-function callDecodeFor (firstElement, input, start = 0) {
+function callDecodeFor(firstElement, input, start = 0) {
   if (firstElement === "i") {
-    return decodeInteger (input, start);
+    return decodeInteger(input, start);
   }
-  
+
   if (firstElement === "l") {
-    return decodeList (input, start);
+    return decodeList(input, start);
   }
 
   if (!isNaN(parseInt(firstElement))) {
@@ -68,14 +71,12 @@ function callDecodeFor (firstElement, input, start = 0) {
   return [INVALID];
 }
 
-function decode (inputValue) {
-  const [result, index] = callDecodeFor (inputValue[0], inputValue, 0);
-  console.log("INdex : ",index, "INPUT VALue : ",inputValue[index - 1]);
-  
+function decode(inputValue) {
+  const [result] = callDecodeFor(inputValue[0], inputValue, 0);
   return result;
 }
 
-function formatText (inputs, actualOutput, expectedOutput) {
+function formatText(inputs, actualOutput, expectedOutput) {
   return `
   Inputs  : ${inputs}
   Actual  : ${actualOutput}
@@ -83,8 +84,8 @@ function formatText (inputs, actualOutput, expectedOutput) {
   ----`;
 }
 
-function testCode (description, inputValue, expectedOutput) {
-  const actualOutput = decode (inputValue);
+function testCode(description, inputValue, expectedOutput) {
+  const actualOutput = decode(inputValue);
   const isEqual = actualOutput.toString() === expectedOutput.toString();
   const symbol = isEqual ? "✅" : "❌";
 
@@ -98,51 +99,51 @@ function testCode (description, inputValue, expectedOutput) {
   }
 }
 
-function heading (text) {
+function heading(text) {
   console.log(text);
   console.log("-".repeat(text.length));
 }
 
-function testForInteger () {
+function testForInteger() {
   heading("TEST FOR INTEGERS");
-  testCode ("Digit in Integer : positive, 1", "i1e", 1);
-  testCode ("Digit in Integer : positive, 2", "i12e", 12);
-  testCode ("Digit in Integer : positive, > 2", "i12345e", 12345);
-  testCode ("Digit in Integer : negative, 1", "i-1e", -1);
-  testCode ("Digit in Integer : negative, 2", "i-12e", -12);
-  testCode ("Digit in Integer : negative, > 2", "i-1234e", -1234);
-  testCode ("Invalid Integer : char in between", "i-123ad4e", INVALID);
+  testCode("Digit in Integer : positive, 1", "i1e", 1);
+  testCode("Digit in Integer : positive, 2", "i12e", 12);
+  testCode("Digit in Integer : positive, > 2", "i12345e", 12345);
+  testCode("Digit in Integer : negative, 1", "i-1e", -1);
+  testCode("Digit in Integer : negative, 2", "i-12e", -12);
+  testCode("Digit in Integer : negative, > 2", "i-1234e", -1234);
+  testCode("Invalid Integer : char in between", "i-123ad4e", INVALID);
   console.log('\n');
 }
 
-function testForString () {
+function testForString() {
   heading("TEST FOR BYTE STRINGS");
-  testCode ("Char in string : 0", "0:", "");
-  testCode ("Char in string : 1", "1:a", "a");
-  testCode ("Char in string : 2", "2:ab", "ab");
-  testCode ("Char in string : special", "6:%$#@!&", "%$#@!&");
-  testCode ("INVALID String : < char than length passed", "4:abcde", INVALID);
-  testCode ("INVALID String : > char than length passed", "4:abc", INVALID);
+  testCode("Char in string : 0", "0:", "");
+  testCode("Char in string : 1", "1:a", "a");
+  testCode("Char in string : 2", "2:ab", "ab");
+  testCode("Char in string : special", "6:%$#@!&", "%$#@!&");
+  testCode("INVALID String : < char than length passed", "4:abcde", INVALID);
+  testCode("INVALID String : > char than length passed", "4:abc", INVALID);
   console.log('\n');
 }
 
-function testForList () {
+function testForList() {
   heading("TEST FOR LISTS");
-  testCode ("Elements in list : 1, integer", "li142aee", INVALID);
-  testCode ("Elements in list : 2, integer (+,+)", "li1ei2ee", [1,2]);
-  testCode ("Elements in list : 2, integer (-,-)", "li-1ei-2ee", [-1,-2]);
-  testCode ("Elements in list : 2, integer (-,+)", "li-1ei2ee", [-1,2]);
-  testCode ("Elements in list : 1, empty string", "l0:e", [""]);
-  testCode ("Elements in list : 2, string", "l1:a5:helloe", ["a", "hello"]);
-  testCode ("Invalid : length : 5, elements : 6", "l5:eeeeee", INVALID);
-  testCode ("Elements in list : 2, nested string", "l1:al5:helloee", ["a", ["hello"]]);
+  testCode("Elements in list : 1, integer", "li142aee", INVALID);
+  testCode("Elements in list : 2, integer (+,+)", "li1ei2ee", [1, 2]);
+  testCode("Elements in list : 2, integer (-,-)", "li-1ei-2ee", [-1, -2]);
+  testCode("Elements in list : 2, integer (-,+)", "li-1ei2ee", [-1, 2]);
+  testCode("Elements in list : 1, empty string", "l0:e", [""]);
+  testCode("Elements in list : 2, string", "l1:a5:helloe", ["a", "hello"]);
+  testCode("Invalid : length : 5, elements : 6", "l5:eeeeee", INVALID);
+  testCode("Elements in list : 2, nested string", "l1:al5:helloee", ["a", ["hello"]]);
   console.log('\n');
 }
 
-function main () {
-  testForInteger ();
-  testForString ();
-  testForList ();
+function main() {
+  testForInteger();
+  testForString();
+  testForList();
 }
 
-main ();
+main();
